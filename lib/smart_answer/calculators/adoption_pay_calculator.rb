@@ -20,6 +20,7 @@ module SmartAnswer::Calculators
     end
 
   private
+
     def rate_for(date)
       awe = (average_weekly_earnings.to_f * 0.9).round(2)
       if date < 6.weeks.since(leave_start_date) && @match_date >= Date.parse('5 April 2015')

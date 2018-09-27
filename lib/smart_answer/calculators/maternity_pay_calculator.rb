@@ -17,7 +17,7 @@ module SmartAnswer::Calculators
     attr_accessor :employee_has_contract_adoption
     attr_accessor :on_payroll
 
-    DAYS_OF_THE_WEEK = %w(Sunday Monday Tuesday Wednesday Thursday Friday Saturday)
+    DAYS_OF_THE_WEEK = %w(Sunday Monday Tuesday Wednesday Thursday Friday Saturday).freeze
     PAYMENT_OPTIONS = {
       weekly: {
         "8": "8 payments or fewer",
@@ -400,7 +400,7 @@ module SmartAnswer::Calculators
       ldm_index = ldm.wday
       offset = -1
       while !work_days.include?(ldm_index)
-        ldm_index > 0 ? ldm_index -= 1 : ldm_index = 6
+        ldm_index.positive? ? ldm_index -= 1 : ldm_index = 6
         offset -= 1
       end
       offset

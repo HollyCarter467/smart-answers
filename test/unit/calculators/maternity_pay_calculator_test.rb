@@ -361,7 +361,7 @@ module SmartAnswer::Calculators
           assert_equal '2013-03-01', calculator.paydates_and_pay.first[:date].to_s
           assert_equal 38.58, calculator.paydates_and_pay.first[:pay]
           assert calculator.paydates_and_pay.last[:date] > calculator.pay_end_date, "Last paydate should be after SMP end date"
-          assert calculator.paydates_and_pay.last[:pay] > 0
+          assert calculator.paydates_and_pay.last[:pay].positive?
         end
       end
 
@@ -424,8 +424,9 @@ module SmartAnswer::Calculators
             2013-08-01 2013-08-15 2013-08-29 2013-09-12 2013-09-26
             2013-10-10
           )
+          actual_pay_dates = paydates_and_pay.map { |p| p[:date].to_s }
 
-          assert_equal expected_pay_dates, paydates_and_pay.map { |p| p[:date].to_s }
+          assert_equal expected_pay_dates, actual_pay_dates
           assert_equal 32.15, paydates_and_pay.first[:pay]
           assert_equal 450, paydates_and_pay.second[:pay]
           assert_equal 270.9, paydates_and_pay[4][:pay]

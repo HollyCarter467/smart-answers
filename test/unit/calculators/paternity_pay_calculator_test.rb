@@ -32,15 +32,17 @@ module SmartAnswer::Calculators
 
         should "suggest a single payment when requesting a one week leave" do
           @calculator.paternity_leave_duration = 'one_week'
+          actual_pay_dates = @calculator.paydates_and_pay.map { |pay| pay[:date] }
+
           assert_equal Date.parse("7 October 2015"), @calculator.pay_end_date
-          assert_equal [Date.parse("7 October 2015")], @calculator.paydates_and_pay.map { |pay| pay[:date] }
+          assert_equal [Date.parse("7 October 2015")], actual_pay_dates
         end
 
         should "suggest two payments when requesting a two week leave" do
           @calculator.paternity_leave_duration = 'two_weeks'
+          actual_pay_dates = @calculator.paydates_and_pay.map { |pay| pay[:date] }
           assert_equal Date.parse("14 October 2015"), @calculator.pay_end_date
-          assert_equal [Date.parse("7 October 2015"), Date.parse("14 October 2015")],
-            @calculator.paydates_and_pay.map { |pay| pay[:date] }
+          assert_equal [Date.parse("7 October 2015"), Date.parse("14 October 2015")], actual_pay_dates
         end
       end
 

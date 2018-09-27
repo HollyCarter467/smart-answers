@@ -26,7 +26,8 @@ module SmartAnswer::Calculators
             "2014-08-24", "2014-08-31", "2014-09-07", "2014-09-14", "2014-09-21",
             "2014-09-28", "2014-10-05", "2014-10-12", "2014-10-19"
           ]
-          assert_equal expected_pay_dates, paydates_and_pay.map { |p| p[:date].to_s }
+          actual_pay_dates = paydates_and_pay.map { |p| p[:date].to_s }
+          assert_equal expected_pay_dates, actual_pay_dates
           assert_equal 136.78, paydates_and_pay.first[:pay]
           assert_equal 136.78, paydates_and_pay[9][:pay]
           assert_equal 138.18, paydates_and_pay[11][:pay]
@@ -48,10 +49,10 @@ module SmartAnswer::Calculators
           expected_pay_dates = %w(2015-04-07 2015-04-14 2015-04-21 2015-04-28 2015-05-05 2015-05-12 2015-05-19 2015-05-26 2015-06-02 2015-06-09 2015-06-16 2015-06-23 2015-06-30 2015-07-07 2015-07-14 2015-07-21 2015-07-28 2015-08-04 2015-08-11 2015-08-18 2015-08-25 2015-09-01 2015-09-08 2015-09-15 2015-09-22 2015-09-29 2015-10-06 2015-10-13 2015-10-20 2015-10-27 2015-11-03 2015-11-10 2015-11-17 2015-11-24 2015-12-01 2015-12-08 2015-12-15 2015-12-22 2015-12-29)
           calculator.pay_pattern = 'monthly'
           calculator.earnings_for_pay_period = 3000
+          actual_pay_dates = calculator.paydates_and_pay.map { |p| p[:date].to_s }
 
           assert_equal 346.15, calculator.average_weekly_earnings.round(2)
-          assert_equal expected_pay_dates, calculator.paydates_and_pay.map { |p| p[:date].to_s }
-
+          assert_equal expected_pay_dates, actual_pay_dates
           assert_equal [(346.15385 * 0.9).round(2)], calculator.paydates_and_pay.first(6).map { |p| p[:pay] }.uniq
           assert_equal [139.58], calculator.paydates_and_pay[6..-1].map { |p| p[:pay] }.uniq
         end
@@ -72,8 +73,9 @@ module SmartAnswer::Calculators
             2014-01-31 2014-02-28 2014-03-28 2014-04-25 2014-05-30
             2014-06-27 2014-07-25 2014-08-29 2014-09-26 2014-10-31
           )
+          actual_pay_dates = paydates_and_pay.map { |p| p[:date].to_s }
 
-          assert_equal expected_pay_dates, paydates_and_pay.map { |p| p[:date].to_s }
+          assert_equal expected_pay_dates, actual_pay_dates
           assert_equal 234.48, paydates_and_pay.first[:pay]
           assert_equal 550.92, paydates_and_pay[3][:pay]
           assert_equal 454.02, paydates_and_pay.last[:pay]
