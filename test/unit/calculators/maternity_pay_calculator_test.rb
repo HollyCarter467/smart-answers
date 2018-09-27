@@ -31,23 +31,26 @@ module SmartAnswer::Calculators
         end
 
         should "calculate the relevant period" do
-          @dd = Date.parse("2012-10-12")
-          @calculator = MaternityPayCalculator.new(@dd)
-          @calculator.last_payday = @calculator.qualifying_week.last
-          payday = @calculator.last_payday.julian - (7 * 9)
-          @calculator.pre_offset_payday = payday
-          assert_equal "Saturday, 15 April 2012 and Saturday, 30 June 2012", @calculator.formatted_relevant_period
+          due_date = Date.parse("2012-10-12")
+          calculator = MaternityPayCalculator.new(due_date)
+          calculator.last_payday = calculator.qualifying_week.last
+          payday = calculator.last_payday.julian - (7 * 9)
+          calculator.pre_offset_payday = payday
+
+          assert_equal "Saturday, 15 April 2012 and Saturday, 30 June 2012", calculator.formatted_relevant_period
         end
 
         should "calculate payday offset" do
           @calculator.last_payday = Date.parse("2012-03-28")
+
           assert_equal Date.parse("2012-02-02"), @calculator.payday_offset
         end
 
         should "calculate the ssp_stop date" do
-          @calculator = MaternityPayCalculator.new(Date.parse("2012 Oct 12"))
-          expected_week = @calculator.expected_week.first
-          assert_equal expected_week.julian - (7 * 4), @calculator.ssp_stop
+          calculator = MaternityPayCalculator.new(Date.parse("2012 Oct 12"))
+          expected_week = calculator.expected_week.first
+
+          assert_equal expected_week.julian - (7 * 4), calculator.ssp_stop
         end
 
         context "with a requested leave date in one month's time" do
@@ -100,125 +103,121 @@ module SmartAnswer::Calculators
             assert_equal 121.86, @calculator.statutory_maternity_rate_b.round(2)
           end
         end
-
-
       end
 
       context "specific date tests (for lower_earning_limits) for birth" do
         should "return 112 for due dates after 6/04/2015" do
-          @due_date = Date.parse("16 December 2015")
-          @calculator = MaternityPayCalculator.new(@due_date)
-          assert_equal 112, @calculator.lower_earning_limit
+          due_date = Date.parse("16 December 2015")
+          calculator = MaternityPayCalculator.new(due_date)
+          assert_equal 112, calculator.lower_earning_limit
         end
 
         should "return 111 for due dates after 14/07/2014" do
-          @due_date = Date.parse("24 July 2014")
-          @calculator = MaternityPayCalculator.new(@due_date)
-          assert_equal 111, @calculator.lower_earning_limit
+          due_date = Date.parse("24 July 2014")
+          calculator = MaternityPayCalculator.new(due_date)
+          assert_equal 111, calculator.lower_earning_limit
         end
 
         should "return lower_earning_limit 109" do
-          @due_date = Date.parse("15 July 2014")
-          @calculator = MaternityPayCalculator.new(@due_date)
-          assert_equal 109, @calculator.lower_earning_limit
+          due_date = Date.parse("15 July 2014")
+          calculator = MaternityPayCalculator.new(due_date)
+          assert_equal 109, calculator.lower_earning_limit
         end
 
         should "return 109 when due is in 2013/2014 tax year" do
-          @due_date = Date.parse("14 November 2013")
-          @calculator = MaternityPayCalculator.new(@due_date)
-          assert_equal 109, @calculator.lower_earning_limit
+          due_date = Date.parse("14 November 2013")
+          calculator = MaternityPayCalculator.new(due_date)
+          assert_equal 109, calculator.lower_earning_limit
         end
 
         should "return lower_earning_limit 107 on 1 January 2013" do
-          @due_date = Date.parse("1 January 2013")
-          @calculator = MaternityPayCalculator.new(@due_date)
-          assert_equal 107, @calculator.lower_earning_limit
+          due_date = Date.parse("1 January 2013")
+          calculator = MaternityPayCalculator.new(due_date)
+          assert_equal 107, calculator.lower_earning_limit
         end
 
         should "return lower_earning_limit 107 on 15 July 2013" do
-          @due_date = Date.parse("15 July 2013")
-          @calculator = MaternityPayCalculator.new(@due_date)
-          assert_equal 107, @calculator.lower_earning_limit
+          due_date = Date.parse("15 July 2013")
+          calculator = MaternityPayCalculator.new(due_date)
+          assert_equal 107, calculator.lower_earning_limit
         end
 
         should "return lower_earning_limit 102 base on due date 15 July 2012" do
-          @due_date = Date.parse("15 July 2012")
-          @calculator = MaternityPayCalculator.new(@due_date)
-          assert_equal 102, @calculator.lower_earning_limit
+          due_date = Date.parse("15 July 2012")
+          calculator = MaternityPayCalculator.new(due_date)
+          assert_equal 102, calculator.lower_earning_limit
         end
 
         should "return lower_earning_limit 102 base on due date 14 July 2012" do
-          @due_date = Date.parse("14 July 2012")
-          @calculator = MaternityPayCalculator.new(@due_date)
-          assert_equal 102, @calculator.lower_earning_limit
+          due_date = Date.parse("14 July 2012")
+          calculator = MaternityPayCalculator.new(due_date)
+          assert_equal 102, calculator.lower_earning_limit
         end
 
         should "return lower_earning_limit 102 base on due date 1 January 2012" do
-          @due_date = Date.parse("1 January 2012")
-          @calculator = MaternityPayCalculator.new(@due_date)
-          assert_equal 102, @calculator.lower_earning_limit
+          due_date = Date.parse("1 January 2012")
+          calculator = MaternityPayCalculator.new(due_date)
+          assert_equal 102, calculator.lower_earning_limit
         end
 
         should "return lower_earning_limit 97" do
-          @due_date = Date.parse("1 January 2011")
-          @calculator = MaternityPayCalculator.new(@due_date)
-          assert_equal 97, @calculator.lower_earning_limit
+          due_date = Date.parse("1 January 2011")
+          calculator = MaternityPayCalculator.new(due_date)
+          assert_equal 97, calculator.lower_earning_limit
         end
 
         should "return lower_earning_limit 95" do
-          @due_date = Date.parse("1 January 2010")
-          @calculator = MaternityPayCalculator.new(@due_date)
-          assert_equal 95, @calculator.lower_earning_limit
+          due_date = Date.parse("1 January 2010")
+          calculator = MaternityPayCalculator.new(due_date)
+          assert_equal 95, calculator.lower_earning_limit
         end
       end
 
 
       context "qualifying_week tests" do
         # due, qualifying_week, latest employment start, start of 11th week before due, start of 4th week
-        # 08/04/12 to 14/04/12 25/12/11 to 31/12/11 09/07/2011 22/01/2012 11/03/2012
         should "due Monday 9th April 2012" do
-          @due_date = Date.parse("2012 Apr 09")
-          @calculator = MaternityPayCalculator.new(@due_date)
-          assert_equal Date.parse("09 Apr 2012"), @calculator.employment_end
-          assert_equal Date.parse("08 Apr 2012")..Date.parse("14 Apr 2012"), @calculator.expected_week.to_r
-          assert_equal Date.parse("25 Dec 2011"), 15.weeks.ago(@calculator.expected_week.first)
-          assert_equal Date.parse("31 Dec 2011"), 15.weeks.ago(@calculator.expected_week.first) + 6
-          assert_equal Date.parse("25 Dec 2011")..Date.parse("31 Dec 2011"), @calculator.qualifying_week.to_r
+          due_date = Date.parse("2012 Apr 09")
+          calculator = MaternityPayCalculator.new(due_date)
+
+          assert_equal Date.parse("09 Apr 2012"), calculator.employment_end
+          assert_equal Date.parse("08 Apr 2012")..Date.parse("14 Apr 2012"), calculator.expected_week.to_r
+          assert_equal Date.parse("25 Dec 2011"), 15.weeks.ago(calculator.expected_week.first)
+          assert_equal Date.parse("31 Dec 2011"), 15.weeks.ago(calculator.expected_week.first) + 6
+          assert_equal Date.parse("25 Dec 2011")..Date.parse("31 Dec 2011"), calculator.qualifying_week.to_r
           # assert_equal 26, (Date.parse(" Dec 2011").julian - Date.parse("09 Jul 2011").julian).to_i / 7
           # assert_equal 26, (Date.parse("14 Apr 2012").julian - Date.parse("15 Oct 2011").julian).to_i / 7
           # FIXME: this should work but 25 weeks rather than 26
-          assert_equal Date.parse("09 Jul 2011"), @calculator.employment_start
-          assert_equal Date.parse("22 Jan 2012"), @calculator.leave_earliest_start_date
-          assert_equal Date.parse("11 Mar 2012"), @calculator.ssp_stop
+          assert_equal Date.parse("09 Jul 2011"), calculator.employment_start
+          assert_equal Date.parse("22 Jan 2012"), calculator.leave_earliest_start_date
+          assert_equal Date.parse("11 Mar 2012"), calculator.ssp_stop
         end
-        # 15/07/12 to 21/07/12 01/04/12 to 07/04/12 15/10/2011 29/04/2012 17/06/2012
+
         should "due Wednesday 18 July 2012" do
-          @due_date = Date.parse("2012 Jul 18")
-          @calculator = MaternityPayCalculator.new(@due_date)
-          assert_equal Date.parse("18 Jul 2012"), @calculator.employment_end
-          assert_equal Date.parse("15 Jul 2012")..Date.parse("21 Jul 2012"), @calculator.expected_week.to_r
-          assert_equal Date.parse("01 Apr 2012")..Date.parse("07 Apr 2012"), @calculator.qualifying_week.to_r
+          due_date = Date.parse("2012 Jul 18")
+          calculator = MaternityPayCalculator.new(due_date)
+
+          assert_equal Date.parse("18 Jul 2012"), calculator.employment_end
+          assert_equal Date.parse("15 Jul 2012")..Date.parse("21 Jul 2012"), calculator.expected_week.to_r
+          assert_equal Date.parse("01 Apr 2012")..Date.parse("07 Apr 2012"), calculator.qualifying_week.to_r
           # DEBUG test
           # assert_equal 26, (Date.parse("21 Jul 2012").julian - Date.parse("15 Oct 2011").julian).to_i / 7
           # FIXME: ...
-          assert_equal Date.parse("15 Oct 2011"), @calculator.employment_start
-          assert_equal Date.parse("29 Apr 2012"), @calculator.leave_earliest_start_date
-          assert_equal Date.parse("17 Jun 2012"), @calculator.ssp_stop
+          assert_equal Date.parse("15 Oct 2011"), calculator.employment_start
+          assert_equal Date.parse("29 Apr 2012"), calculator.leave_earliest_start_date
+          assert_equal Date.parse("17 Jun 2012"), calculator.ssp_stop
         end
-        # 09/09/12 to 15/09/12 27/05/12 to 02/06/12 10/12/2011 24/06/2012 12/08/2012
+
         should "due Wednesday 14 Sep 2012" do
-          @due_date = Date.parse("2012 Sep 14")
-          @calculator = MaternityPayCalculator.new(@due_date)
-          assert_equal Date.parse("14 Sep 2012"), @calculator.employment_end
-          assert_equal Date.parse("09 Sep 2012")..Date.parse("15 Sep 2012"), @calculator.expected_week.to_r
-          assert_equal Date.parse("27 May 2012")..Date.parse("02 Jun 2012"), @calculator.qualifying_week.to_r
-          assert_equal Date.parse("10 Dec 2011"), @calculator.employment_start
-          assert_equal Date.parse("24 Jun 2012"), @calculator.leave_earliest_start_date
-          assert_equal Date.parse("12 Aug 2012"), @calculator.ssp_stop
+          due_date = Date.parse("2012 Sep 14")
+          calculator = MaternityPayCalculator.new(due_date)
+          assert_equal Date.parse("14 Sep 2012"), calculator.employment_end
+          assert_equal Date.parse("09 Sep 2012")..Date.parse("15 Sep 2012"), calculator.expected_week.to_r
+          assert_equal Date.parse("27 May 2012")..Date.parse("02 Jun 2012"), calculator.qualifying_week.to_r
+          assert_equal Date.parse("10 Dec 2011"), calculator.employment_start
+          assert_equal Date.parse("24 Jun 2012"), calculator.leave_earliest_start_date
+          assert_equal Date.parse("12 Aug 2012"), calculator.ssp_stop
         end
-        # 07/04/13 to 13/04/13 23/12/12 to 29/12/12 07/07/2012 20/01/2013 10/03/2013
-        # 27/01/13 to 02/02/13 14/10/12 to 20/10/12 28/04/2012 11/11/2012 30/12/2012
-        # 03/02/13 to 09/02/13 21/10/12 to 27/10/12 05/05/2012 18/11/2012 06/01/2013
       end
 
       context "average_weekly_earnings" do
@@ -378,6 +377,7 @@ module SmartAnswer::Calculators
           assert_equal '2012-09-27', paydates.third.to_s
           assert_equal '2013-04-29', paydates.last.to_s
         end
+
         should "calculate the particular weekday of the month pay dates" do
           @calculator.pay_method = 'a_certain_week_day_each_month'
           @calculator.pay_week_in_month = "second"
@@ -392,19 +392,19 @@ module SmartAnswer::Calculators
           assert_equal '2013-05-13', paydates.last
         end
       end
+
       context "pay date on leave start date" do
-        setup do
-          @calculator = MaternityPayCalculator.new(Date.parse('21 March 2013'))
-          @calculator.leave_start_date = Date.parse('1 March 2013')
-          @calculator.pay_method = 'first_day_of_the_month'
-          @calculator.stubs(:average_weekly_earnings).returns(300.0)
-        end
         should "pay on the leave start date" do
-          assert_equal '2013-03-01', @calculator.paydates_first_day_of_the_month.first.to_s
-          assert_equal '2013-03-01', @calculator.paydates_and_pay.first[:date].to_s
-          assert_equal 38.58, @calculator.paydates_and_pay.first[:pay]
-          assert @calculator.paydates_and_pay.last[:date] > @calculator.pay_end_date, "Last paydate should be after SMP end date"
-          assert @calculator.paydates_and_pay.last[:pay] > 0
+          calculator = MaternityPayCalculator.new(Date.parse('21 March 2013'))
+          calculator.leave_start_date = Date.parse('1 March 2013')
+          calculator.pay_method = 'first_day_of_the_month'
+          calculator.stubs(:average_weekly_earnings).returns(300.0)
+
+          assert_equal '2013-03-01', calculator.paydates_first_day_of_the_month.first.to_s
+          assert_equal '2013-03-01', calculator.paydates_and_pay.first[:date].to_s
+          assert_equal 38.58, calculator.paydates_and_pay.first[:pay]
+          assert calculator.paydates_and_pay.last[:date] > calculator.pay_end_date, "Last paydate should be after SMP end date"
+          assert calculator.paydates_and_pay.last[:pay] > 0
         end
       end
 
@@ -433,6 +433,7 @@ module SmartAnswer::Calculators
           @calculator = MaternityPayCalculator.new(Date.parse('21 January 2013'))
           @calculator.leave_start_date = Date.parse('03 January 2013')
         end
+
         should "calculate pay due for each pay date on a weekly cycle" do
           @calculator.pay_date = Date.parse('28 December 2012') # Friday before maternity leave/pay starts.
           @calculator.pay_method = 'weekly'
@@ -440,19 +441,17 @@ module SmartAnswer::Calculators
           @calculator.earnings_for_pay_period = 2000
 
           paydates_and_pay = @calculator.paydates_and_pay
+
           assert_equal 40, paydates_and_pay.size
-
           assert paydates_and_pay.first[:date].friday?, "Paydates should all be fridays"
-
           assert_equal 64.29, paydates_and_pay.first[:pay]
           assert_equal '2013-01-04', paydates_and_pay.first[:date].to_s
-
           assert_equal 225, paydates_and_pay.second[:pay]
           assert_equal '2013-01-11', paydates_and_pay.second[:date].to_s
-
           assert_equal 97.7, paydates_and_pay.last[:pay]
           assert_equal '2013-10-04', paydates_and_pay.last[:date].to_s
         end
+
         should "calculate pay due for each pay date on a bi-weekly cycle" do
           @calculator.pay_date = Date.parse('03 January 2013')
           @calculator.pay_method = 'every_2_weeks'
@@ -468,12 +467,14 @@ module SmartAnswer::Calculators
             2013-08-01 2013-08-15 2013-08-29 2013-09-12 2013-09-26
             2013-10-10
           )
+
           assert_equal expected_pay_dates, paydates_and_pay.map { |p| p[:date].to_s }
           assert_equal 32.15, paydates_and_pay.first[:pay]
           assert_equal 450, paydates_and_pay.second[:pay]
           assert_equal 270.9, paydates_and_pay[4][:pay]
           assert_equal 117.24, paydates_and_pay.last[:pay]
         end
+
         should "calculate pay due for each pay date on a monthly cycle" do
           @calculator.pay_day_in_month = 5
           @calculator.pay_method = 'specific_date_each_month'
@@ -481,12 +482,12 @@ module SmartAnswer::Calculators
           paydates_and_pay = @calculator.paydates_and_pay
 
           assert_equal 10, paydates_and_pay.size
-
           assert_equal '2013-01-05', paydates_and_pay.first[:date].to_s
           assert_equal 96.43, paydates_and_pay.first[:pay]
           assert_equal '2013-10-05', paydates_and_pay.last[:date].to_s
           assert_equal 527.58, paydates_and_pay.last[:pay]
         end
+
         should "calculate pay due on the first day of the month" do
           @calculator.pay_method = 'first_day_of_the_month'
           @calculator.stubs(:average_weekly_earnings).returns(250.0)
@@ -498,6 +499,7 @@ module SmartAnswer::Calculators
           assert_equal '2013-11-01', paydates_and_pay.last[:date].to_s
           assert_equal 19.54, paydates_and_pay.last[:pay]
         end
+
         should "calculate pay due on the last day of the month" do
           @calculator.pay_method = 'last_day_of_the_month'
           @calculator.stubs(:average_weekly_earnings).returns(250.0)
@@ -509,6 +511,7 @@ module SmartAnswer::Calculators
           assert_equal '2013-10-31', paydates_and_pay.last[:date].to_s
           assert_equal 39.08, paydates_and_pay.last[:pay]
         end
+
         should "calculate pay due for a certain weekday each month" do
           @calculator.pay_method = 'a_certain_week_day_each_month'
           @calculator.pay_day_in_week = 5
@@ -526,16 +529,13 @@ module SmartAnswer::Calculators
       end
 
       context "End of SMP period falls between payday and end of calendar month" do
-        setup do
-          @calculator = MaternityPayCalculator.new(Date.parse('8 October 2017'))
-          @calculator.leave_start_date = Date.parse('1 October 2017')
-          @calculator.work_days = [1, 2, 3, 4, 5]
-        end
-
         should "calculate pay due on the last working day of the month" do
-          @calculator.pay_method = 'last_working_day_of_the_month'
-          @calculator.stubs(:average_weekly_earnings).returns(203.0769)
-          paydates_and_pay = @calculator.paydates_and_pay
+          calculator = MaternityPayCalculator.new(Date.parse('8 October 2017'))
+          calculator.leave_start_date = Date.parse('1 October 2017')
+          calculator.work_days = [1, 2, 3, 4, 5]
+          calculator.pay_method = 'last_working_day_of_the_month'
+          calculator.stubs(:average_weekly_earnings).returns(203.0769)
+          paydates_and_pay = calculator.paydates_and_pay
 
           assert_equal 10, paydates_and_pay.size
           assert_equal '2017-10-31', paydates_and_pay.first[:date].to_s
@@ -546,15 +546,13 @@ module SmartAnswer::Calculators
       end
 
       context "HMRC test scenario for SMP Pay week offset" do
-        setup do
-          @calculator = MaternityPayCalculator.new(Date.parse('22 February 2013'))
-          @calculator.leave_start_date = Date.parse('25 January 2013')
-          @calculator.pay_method = 'weekly'
-          @calculator.pay_date = Date.parse('25 January 2013')
-          @calculator.stubs(:average_weekly_earnings).returns(200)
-        end
         should "calculate pay on paydates with April 2013 uprating" do
-          paydates_and_pay =  @calculator.paydates_and_pay
+          calculator = MaternityPayCalculator.new(Date.parse('22 February 2013'))
+          calculator.leave_start_date = Date.parse('25 January 2013')
+          calculator.pay_method = 'weekly'
+          calculator.pay_date = Date.parse('25 January 2013')
+          calculator.stubs(:average_weekly_earnings).returns(200)
+          paydates_and_pay =  calculator.paydates_and_pay
 
           assert_equal 25.72, paydates_and_pay.first[:pay]
           assert_equal 180.0, paydates_and_pay.second[:pay]
@@ -566,16 +564,15 @@ module SmartAnswer::Calculators
         end
       end
       context "HMRC test scenario for SMP paid a certain day of the month" do
-        setup do
-          @calculator = MaternityPayCalculator.new(Date.parse('22 February 2013'))
-          @calculator.leave_start_date = Date.parse('25 January 2013')
-          @calculator.pay_method = 'a_certain_week_day_each_month'
-          @calculator.pay_day_in_week = 5
-          @calculator.pay_week_in_month = 'last'
-          @calculator.stubs(:average_weekly_earnings).returns(144.32)
-        end
         should "calculate pay on paydates with April 2013 uprating" do
-          paydates_and_pay =  @calculator.paydates_and_pay
+          calculator = MaternityPayCalculator.new(Date.parse('22 February 2013'))
+          calculator.leave_start_date = Date.parse('25 January 2013')
+          calculator.pay_method = 'a_certain_week_day_each_month'
+          calculator.pay_day_in_week = 5
+          calculator.pay_week_in_month = 'last'
+          calculator.stubs(:average_weekly_earnings).returns(144.32)
+          paydates_and_pay = calculator.paydates_and_pay
+
           assert_equal({ date: Date.parse('25 January 2013'), pay: 18.56 }, paydates_and_pay.first)
           assert_equal({ date: Date.parse('29 March 2013'), pay: 649.44 }, paydates_and_pay.third)
           assert_equal({ date: Date.parse('31 May 2013'), pay: 649.44 }, paydates_and_pay[4])
@@ -583,22 +580,20 @@ module SmartAnswer::Calculators
       end
 
       context "pay date starting month is December" do
-        setup do
+        should "produce a list of the paydates adjust one month forward" do
           Timecop.travel("26 Jul 2013")
 
-          @calculator = MaternityPayCalculator.new(Date.parse("14 January 2014"))
-          @calculator.leave_start_date = Date.parse("12 December 2013")
-          @calculator.pay_method = "monthly"
-          @calculator.pay_date = Date.parse("1 December 2013")
-          @calculator.stubs(:average_weekly_earnings).returns(200)
-        end
+          calculator = MaternityPayCalculator.new(Date.parse("14 January 2014"))
+          calculator.leave_start_date = Date.parse("12 December 2013")
+          calculator.pay_method = "monthly"
+          calculator.pay_date = Date.parse("1 December 2013")
+          calculator.stubs(:average_weekly_earnings).returns(200)
 
-        should "produce a list of the paydates adjust one month forward" do
           assert_equal ["Wed, 01 Jan 2014", "Sat, 01 Feb 2014", "Sat, 01 Mar 2014",
                         "Tue, 01 Apr 2014", "Thu, 01 May 2014", "Sun, 01 Jun 2014",
                         "Tue, 01 Jul 2014", "Fri, 01 Aug 2014", "Mon, 01 Sep 2014",
                         "Wed, 01 Oct 2014"].map { |s| Date.parse(s) },
-                       @calculator.paydates_first_day_of_the_month
+                       calculator.paydates_first_day_of_the_month
         end
       end
 
