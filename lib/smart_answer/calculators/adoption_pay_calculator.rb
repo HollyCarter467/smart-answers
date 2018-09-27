@@ -15,6 +15,10 @@ module SmartAnswer::Calculators
       @leave_earliest_start_date = 14.days.ago(date)
     end
 
+    def adoption_qualifying_start
+      @match_date.sunday? ? @match_date : @match_date.beginning_of_week(:sunday)
+    end
+
   private
     def rate_for(date)
       awe = (average_weekly_earnings.to_f * 0.9).round(2)

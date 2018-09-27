@@ -12,6 +12,10 @@ module SmartAnswer::Calculators
       paternity_leave_duration == 'one_week' ? 1 : 2
     end
 
+    def adoption_qualifying_start
+      @match_date.sunday? ? @match_date : @match_date.beginning_of_week(:sunday)
+    end
+
   private
     def rate_for(date)
       awe = (average_weekly_earnings.to_f * 0.9).round(2)
